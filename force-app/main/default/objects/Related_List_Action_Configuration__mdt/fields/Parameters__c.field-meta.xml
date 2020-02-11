@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Parameters__c</fullName>
+    <description>For URL type provide in the format: key1=value&amp;key2=value
+For Lightning Aura Component type provide in the format: {key1:&#39;value1&#39;, key2:&#39;value2&#39;}</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>For URL type provide in the format: key1=value&amp;key2=value
+For Lightning Aura Component type provide in the format: {key1:&#39;value1&#39;, key2:&#39;value2&#39;}</inlineHelpText>
+    <label>Parameters</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

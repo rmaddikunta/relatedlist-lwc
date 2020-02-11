@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Related_List_Configuration__c</fullName>
+    <description>Associate Parent, Child object combination to consider the field to be displayed.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <label>Related List Configuration</label>
+    <referenceTo>Related_List_Configuration__mdt</referenceTo>
+    <relationshipLabel>Related List Field Configurations</relationshipLabel>
+    <relationshipName>Related_List_Field_Configurations</relationshipName>
+    <required>true</required>
+    <type>MetadataRelationship</type>
+    <unique>false</unique>
+</CustomField>

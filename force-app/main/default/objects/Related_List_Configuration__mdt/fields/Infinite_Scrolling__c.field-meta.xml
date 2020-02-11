@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Infinite_Scrolling__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Enable infinite scrolling to load more rows after displaying initial rows specified by &#39;Number of Rows&#39; field</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Enable infinite scrolling to load more rows after displaying initial rows specified by &#39;Number of Rows&#39; field</inlineHelpText>
+    <label>Enable Infinite Scrolling</label>
+    <type>Checkbox</type>
+</CustomField>

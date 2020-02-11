@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sortable__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Enable sorting on the column</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Enable sorting on the column</inlineHelpText>
+    <label>Sortable</label>
+    <type>Checkbox</type>
+</CustomField>

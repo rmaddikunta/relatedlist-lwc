@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Filer_Value_Required_When_Enabled</fullName>
+    <active>true</active>
+    <description>Filter values field must provide options when Filter is Enabled for this column</description>
+    <errorConditionFormula>IF(AND(Filter__c, ISBLANK(Filter_Values__c)), true, false)</errorConditionFormula>
+    <errorDisplayField>Filter_Values__c</errorDisplayField>
+    <errorMessage>Filter values must be provided for this column when Filter is enabled.</errorMessage>
+</ValidationRule>

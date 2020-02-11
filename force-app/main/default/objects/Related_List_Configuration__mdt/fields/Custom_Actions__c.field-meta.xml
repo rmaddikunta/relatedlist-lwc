@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Custom_Actions__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Enable to support Row and/or Header level custom actions for the Related List</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Enable record or header level custom actions in Related List</inlineHelpText>
+    <label>Enable Custom Actions</label>
+    <type>Checkbox</type>
+</CustomField>

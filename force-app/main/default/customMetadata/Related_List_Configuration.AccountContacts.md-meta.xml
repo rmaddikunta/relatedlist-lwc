@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Contacts</label>
+    <protected>true</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Child_Object__c</field>
+        <value xsi:type="xsd:string">Contact</value>
+    </values>
+    <values>
+        <field>Custom_Actions__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Custom_WHERE_Clause__c</field>
+        <value xsi:type="xsd:string">LastName=&#39;Maddikunta&#39;</value>
+    </values>
+    <values>
+        <field>Delete_Action__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Edit_Action__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Icon_BG_Color__c</field>
+        <value xsi:type="xsd:string">#A094ED</value>
+    </values>
+    <values>
+        <field>Icon_URL__c</field>
+        <value xsi:type="xsd:string">/img/icon/t4v35/standard/contact_120.png</value>
+    </values>
+    <values>
+        <field>Infinite_Scrolling__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Layout__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>New_Action__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Number_of_Rows__c</field>
+        <value xsi:type="xsd:double">50.0</value>
+    </values>
+    <values>
+        <field>Parent_ID_Field__c</field>
+        <value xsi:type="xsd:string">AccountId</value>
+    </values>
+    <values>
+        <field>Parent_Object__c</field>
+        <value xsi:type="xsd:string">Account</value>
+    </values>
+    <values>
+        <field>Upload_Files_Action__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Use_Custom_WHERE_Clause__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>View_Action__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+</CustomMetadata>

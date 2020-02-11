@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Action__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Enable/Disable to support New Record action in the Related List</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Enable header level New Record action in the Related List</inlineHelpText>
+    <label>Enable New Action</label>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Custom_WHERE_Clause_Enabled_but_Is_Blank</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(AND(Use_Custom_WHERE_Clause__c, ISBLANK(Custom_WHERE_Clause__c)), true, false)</errorConditionFormula>
+    <errorDisplayField>Custom_WHERE_Clause__c</errorDisplayField>
+    <errorMessage>Custom WHERE clause is enabled but not provided.</errorMessage>
+</ValidationRule>
