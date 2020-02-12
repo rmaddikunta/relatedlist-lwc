@@ -1,9 +1,6 @@
 public with sharing class RelatedRecordService {
     private static RLConfig config;
-    public RelatedRecordService() {
-
-    }
-
+    
     @AuraEnabled(cacheable=true)
     public static RLConfig getRelatedListConfigDetails( String rlcName ) {
         try {
@@ -32,10 +29,22 @@ public with sharing class RelatedRecordService {
             config.useCustomWhereClause = rlConfig.Use_Custom_WHERE_Clause__c;
             config.customWhereClause = rlConfig.Custom_WHERE_Clause__c;
             config.layout = rlConfig.Layout__c;
+            config.height = Integer.valueOf(rlConfig.Height__c);
+
+            //
+            // Get child relationship name
+            //
+            List<Schema.DescribeSObjectResult> describeSobjects = Schema.describeSObjects(new List<String>{rlConfig.Parent_Object__c});
+            for(Schema.Childrelationship eachRelationship : describeSobjects[0].getChildRelationships()){
+                if(eachRelationship.getChildSObject().getDescribe().getLocalName() == rlConfig.Child_Object__c){
+                    config.relationshipName = String.valueOf(eachRelationship.getRelationshipName());
+                }
+            }
+
             //
             //  Create Columns 
             //
-            List<Schema.DescribeSObjectResult> describeSobjects = Schema.describeSObjects(new List<String>{rlConfig.Child_Object__c});
+            describeSobjects = Schema.describeSObjects(new List<String>{rlConfig.Child_Object__c});
             
             if (rlConfig.getSObjects('Related_List_Field_Configurations__r') != null && rlConfig.getSObjects('Related_List_Field_Configurations__r').size() != 0){
                 relatedRecordService.RLField field;
@@ -172,6 +181,7 @@ public with sharing class RelatedRecordService {
                                     + 'Use_Custom_WHERE_Clause__c, '
                                     + 'Custom_WHERE_Clause__c, '
                                     + 'Layout__c, '
+                                    + 'Height__c, '
                                     + '(' + fieldListConfigQuery + '), '
                                     + '(' + actionConfigQuery + ') '
                                 + 'FROM Related_List_Configuration__mdt '
@@ -215,12 +225,13 @@ public with sharing class RelatedRecordService {
         return records;
     }
 
-    private class RLConfig {
+    public class RLConfig {
         @AuraEnabled public String title;
         @AuraEnabled public String iconurl;
         @AuraEnabled public String iconBGColor;
         @AuraEnabled public String parentObject;
         @AuraEnabled public String childObject;
+        @AuraEnabled public String relationshipName;
         @AuraEnabled public String parentIdField;
         @AuraEnabled public Integer noOfRows;
         @AuraEnabled public List<RLField> fields = new List<RLField>();
@@ -233,7 +244,8 @@ public with sharing class RelatedRecordService {
         @AuraEnabled public Boolean enableInfiniteScrolling;
         @AuraEnabled public Boolean useCustomWhereClause;
         @AuraEnabled public String customWhereClause;     
-        @AuraEnabled public String layout;                        
+        @AuraEnabled public String layout;          
+        @AuraEnabled public Integer height;                      
     }
     private class RLField{
         @AuraEnabled public String label;
