@@ -1,76 +1,72 @@
 <template>
     <!--main related list component-->
-    <div class="slds-page-header slds-page-header_related-list">
-        <header class="slds-media slds-media--center slds-has-flexi-truncate">
-            <div class="slds-page-header__name">
-                <div class="slds-grid slds-grid--align-spread">
-                    <div class="slds-media__figure stencil slds-avatar slds-avatar_small" aria-hidden="true">
-                        <div class="extraSmall forceEntityIcon" style={iconBackground} data-aura-class="forceEntityIcon">
-                            <span class="uiImage" data-aura-class="uiImage">
-                                <image src={iconurl} class="icon " alt={title} title={title}/>
-                            </span>
+    <div class="container forceRelatedListSingleContainer" data-aura-class="forceRelatedListSingleContainer">
+        <article class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop" data-aura-class="forceRelatedListCardDesktop">
+            <div class="slds-grid slds-page-header forceRelatedListCardHeader">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-page-header__name">
+                        <div class="slds-grid slds-grid--align-spread">
+                            <div class="slds-media__figure stencil slds-avatar slds-avatar_small" aria-hidden="true">
+                                <div class="extraSmall forceEntityIcon" style={iconBackground} data-aura-class="forceEntityIcon">
+                                    <span class="uiImage" data-aura-class="uiImage">
+                                        <image src={iconurl} class="icon " alt={title} title={title}/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <h2>
+                                    <a class="slds-card__header-link baseCard__header-title-container">
+                                        <span class="slds-card__header-title slds-truncate slds-m-right--xx-small" title={title}>{title}</span>
+                                    </a>
+                                </h2>
+                            </div>
+                            
                         </div>
                     </div>
-                    <div class="slds-media__body">
-                        <h2>
-                            <a class="slds-card__header-link baseCard__header-title-container">
-                                <span class="slds-card__header-title slds-truncate slds-m-right--xx-small" title={title}>{title}</span>
-                            </a>
-                        </h2>
+                </header>
+                <div class="slds-no-flex">
+                    <div class="slds-col slds-shrink-none slds-align-right actionsContainer">
+                        <div class="slds-form-element">
+                            <lightning-button-group role="group" class="slds-button-group">
+                                <template for:each={listActions} for:item="lAction">
+                                    <template if:false={lAction.isFileUpload}>
+                                        <lightning-button class="btn btn-secondary" key={lAction.name} name={lAction.name} label={lAction.label} actiontype={lAction.type} actionurl={lAction.actionURL} onclick={handleListAction}></lightning-button>
+                                    </template>
+                                    <template if:true={lAction.isFileUpload}>
+                                        <lightning-file-upload
+                                                key={lAction.name}
+                                                name="Files"
+                                                accept={acceptedFormats}
+                                                record-id={recordId}
+                                                onuploadfinished={handleUploadFinished}
+                                                multiple
+                                                class="btn btn-secondary">
+                                        </lightning-file-upload>
+                                    </template>
+                                </template>
+                            </lightning-button-group>
+                        </div>
                     </div>
-                    
                 </div>
             </div>
-        </header>
+                
+            <div style="height: 300px;">
+                <lightning-datatable
+                        key-field="Id"
+                        data={data}
+                        columns={columns}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column>
+                </lightning-datatable>
+            </div>
+
+            <!--spinner when component is loading-->
+            <div class="stencil-timeline-spinner">
+                <template if:false={isLoaded}>
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </template>
+            </div>
+            <!--end spinner-->
+        </article>
     </div>
-        <div class="slds-col slds-shrink-none slds-align-right actionsContainer">
-            <div class="slds-form-element">
-                <div class="slds-form-element">
-                    <lightning-button-group role="group" class="slds-button-group">
-                        <template for:each={listActions} for:item="lAction">
-                            <template if:false={lAction.isFileUpload}>
-                                <lightning-button class="btn btn-secondary" key={lAction.name} name={lAction.name} label={lAction.label} actiontype={lAction.type} actionurl={lAction.actionURL} onclick={handleListAction}></lightning-button>
-                            </template>
-                        </template>
-                    </lightning-button-group>
-                </div>
-                <div class="slds-form-element">
-                    <template for:each={listActions} for:item="lAction">
-                        <template if:true={lAction.isFileUpload}>
-                            <lightning-file-upload
-                                    key={lAction.name}
-                                    label=""
-                                    name="Files"
-                                    accept={acceptedFormats}
-                                    record-id={recordId}
-                                    onuploadfinished={handleUploadFinished}
-                                    multiple
-                                    class="btn btn-secondary">
-                            </lightning-file-upload>
-                        </template>
-                    </template>
-                </div>
-            </div>
-        </div>
-        <div style="height: 300px;">
-            <lightning-datatable
-                    key-field="Id"
-                    data={data}
-                    columns={columns}
-                    onrowaction={handleRowAction}
-                    hide-checkbox-column>
-            </lightning-datatable>
-        </div>
-
-        <!--spinner when component is loading-->
-        <div class="stencil-timeline-spinner">
-            <template if:false={isLoaded}>
-                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
-            </template>
-        </div>
-        <!--end spinner-->
-    
-
-    
-
 </template>
