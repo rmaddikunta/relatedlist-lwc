@@ -4,8 +4,8 @@ import { deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 
-import getRelatedListConfigDetails from '@salesforce/apex/relatedRecordService.getRelatedListConfigDetails';
-import getRelatedData from '@salesforce/apex/relatedRecordService.getRelatedData';
+import getRelatedListConfigDetails from '@salesforce/apex/RelatedRecordService.getRelatedListConfigDetails';
+import getRelatedData from '@salesforce/apex/RelatedRecordService.getRelatedData';
 
 export default class relatedlist extends NavigationMixin(LightningElement) {
     //Adminstrator accessible attributes in app builder
@@ -79,7 +79,7 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
         switch (actionName) {
             case 'New':
                 //console.log('handleNew action');
-                this.handleNew(this.childObject);
+                this.handleNew(this.childObject, this.recordId);
                 break;
             default:
                 try{
@@ -122,26 +122,29 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
         uploadedFiles.forEach((file) => { console.log("files uploaded : " , file.name, file.documentId); });
     }
 
-    handleNew(object){
+    handleNew(object, recordId){
+        const paramStr =  "{\"" + this.parentIdField + "\":\"" + recordId + "\"}";
+        console.log('paramStr', paramStr);
+        const parentParam = JSON.parse(paramStr);
+        console.log('handle new');
         this[NavigationMixin.Navigate]({
             type: 'standard__objectPage',
             attributes: {
                 objectApiName: object,
                 actionName: 'new'
-            }
+            },
+            state : parentParam
         });
     } 
     
     handleView(object, recordId){
-        const parentParam = JSON.parse("{" + this.parentIdField + ":'" + recordId + "'");
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
                 recordId: recordId,
                 objectApiName: object, // objectApiName is optional
                 actionName: 'view'
-            },
-            state : parentParam
+            }
         });
     } 
     
