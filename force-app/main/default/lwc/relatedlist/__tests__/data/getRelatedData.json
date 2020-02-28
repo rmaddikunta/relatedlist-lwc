@@ -1,0 +1,19 @@
+[
+    {
+       "Id": "0032100000nlVE2AAM",
+       "Name": "Test Maddikunta",
+       "Phone": "7035931301"
+    },
+    {
+       "Id": "0032100000nlVEMAA2",
+       "Name": "Ramana Maddikunta",
+       "Phone": "7035931301",
+       "Email": "ramana.maddikunta@gmail.com",
+       "MailingAddress": {
+          "street": "43687 Frogs Leap Terrace",
+          "city": "Ashburn",
+          "state": "Virginia",
+          "postalCode": "20147"
+       }
+    }
+ ]

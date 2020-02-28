@@ -1,0 +1,100 @@
+{
+    "actions": [
+       {
+          "actionURL": "",
+          "isFileUpload": false,
+          "label": "New",
+          "name": "New",
+          "type": "ListAction"
+       },
+       {
+         "actionURL": "",
+         "isFileUpload": false,
+         "label": "Go",
+         "name": "Go",
+         "type": "ListAction"
+      },
+       {
+          "actionURL": "",
+          "isFileUpload": false,
+          "label": "Edit",
+          "name": "Edit",
+          "type": "RowAction"
+       },
+       {
+          "actionURL": "",
+          "isFileUpload": false,
+          "label": "View",
+          "name": "View",
+          "type": "RowAction"
+       },
+       {
+          "actionURL": "",
+          "isFileUpload": false,
+          "label": "Delete",
+          "name": "Delete",
+          "type": "RowAction"
+       },
+       {
+          "actionURL": "SomeComponent",
+          "isFileUpload": false,
+          "label": "New Contact",
+          "name": "New_Contact",
+          "params": "key=value",
+          "sequence": 1,
+          "targetType": "URL",
+          "type": "ListAction"
+       }
+    ],
+    "childObject": "Contact",
+    "customWhereClause": "LastName='Maddikunta'",
+    "enableCustomActions": true,
+    "enableDeleteAction": true,
+    "enableEditAction": true,
+    "enableInfiniteScrolling": false,
+    "enableNewAction": true,
+    "enableViewAction": true,
+    "fields": [
+       {
+          "enableFilter": false,
+          "fieldName": "Name",
+          "label": "Full Name",
+          "sequence": 1,
+          "sortable": false,
+          "type": "STRING"
+       },
+       {
+          "enableFilter": false,
+          "fieldName": "Phone",
+          "label": "Cell Phone",
+          "sequence": 2,
+          "sortable": false,
+          "type": "PHONE"
+       },
+       {
+          "enableFilter": false,
+          "fieldName": "Email",
+          "label": "Email",
+          "sequence": 3,
+          "sortable": false,
+          "type": "EMAIL"
+       },
+       {
+          "enableFilter": false,
+          "fieldName": "MailingAddress",
+          "label": "Mailing Address",
+          "sequence": 4,
+          "sortable": false,
+          "type": "ADDRESS"
+       }
+    ],
+    "height": 500,
+    "iconBGColor": "#A094ED",
+    "iconurl": "/img/icon/t4v35/standard/contact_120.png",
+    "noOfRows": 50,
+    "parentIdField": "AccountId",
+    "parentObject": "Account",
+    "relationshipName": "Contacts",
+    "title": "Contacts",
+    "useCustomWhereClause": false
+ }
