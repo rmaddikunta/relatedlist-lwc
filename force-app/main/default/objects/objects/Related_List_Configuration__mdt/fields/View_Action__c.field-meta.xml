@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>View_Action__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Enable to support record level View Details action in Related List</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Enable record level View Details action in Related List</inlineHelpText>
+    <label>Enable View Action</label>
+    <type>Checkbox</type>
+</CustomField>

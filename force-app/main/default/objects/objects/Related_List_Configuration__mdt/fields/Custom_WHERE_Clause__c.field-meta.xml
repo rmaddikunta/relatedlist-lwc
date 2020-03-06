@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Custom_WHERE_Clause__c</fullName>
+    <description>Custom where clause to query the related records.</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Custom where clause to query the related records.</inlineHelpText>
+    <label>Custom WHERE Clause</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

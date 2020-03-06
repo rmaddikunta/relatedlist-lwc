@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_Big_Objects_Allowed_Parent</fullName>
+    <active>true</active>
+    <description>Related List is not a good option for BigObjects</description>
+    <errorConditionFormula>IF ( CONTAINS( TEXT(Parent_Object__c), &#39;__b&#39;), true, false)</errorConditionFormula>
+    <errorDisplayField>Parent_Object__c</errorDisplayField>
+    <errorMessage>Big Objects cannot be used in the Related List. Supports standard and custom objects only.</errorMessage>
+</ValidationRule>
