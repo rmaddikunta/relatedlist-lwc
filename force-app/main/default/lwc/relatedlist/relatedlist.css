@@ -20,7 +20,7 @@
     top: 5%;	
 }
 
-.stencil-timeline-spinner {
+.stencil-rl-spinner {
     text-align: center;
 }
 
@@ -74,7 +74,6 @@
 .timeline-canvas {
     overflow-y: auto;
     border-bottom: 1px solid #D5DBE4;
-    --height: 227px;
     overflow-x: hidden;
 }
 
@@ -82,8 +81,6 @@
     background-color: #FFFFFF;
     border-bottom: 1px solid #D5DBE4;
     height: 25px;
-    --border-left: 1px solid #d5dbe4;
-    --border-right: 1px solid #d5dbe4;
 }
 
 .timeline-canvas-axis line {
@@ -209,7 +206,6 @@
 .timeline-canvas-record-label {
     fill: rgb(63, 66, 71);
     shape-rendering: crispEdges;
-    --color: #626a76;
     color: #080707;
     font-size: .8125rem;
     cursor: pointer; 

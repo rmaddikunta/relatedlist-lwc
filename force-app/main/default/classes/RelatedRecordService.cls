@@ -47,10 +47,10 @@ public with sharing class RelatedRecordService {
             describeSobjects = Schema.describeSObjects(new List<String>{rlConfig.Child_Object__c});
             
             if (rlConfig.getSObjects('Related_List_Field_Configurations__r') != null && rlConfig.getSObjects('Related_List_Field_Configurations__r').size() != 0){
-                relatedRecordService.RLField field;
+                RelatedRecordService.RLField field;
                 for (Sobject eachCh : (List<SObject>)rlConfig.getSObjects('Related_List_Field_Configurations__r')) {
                     if(eachCh.get('Field_Name__c') != null){
-                        field = new relatedRecordService.RLField();
+                        field = new RelatedRecordService.RLField();
                         
                         field.fieldName = String.valueOf(eachCh.get('Field_Name__c'));
                         field.label = String.valueOf(eachCh.get('Field_Label__c'));
@@ -89,29 +89,29 @@ public with sharing class RelatedRecordService {
 
     private static void setRowAndListActions(Related_List_Configuration__mdt rlConfig, Schema.DescribeSObjectResult describeSobject){
         
-        List<relatedRecordService.RLAction> actions = new List<relatedRecordService.RLAction>();
+        List<RelatedRecordService.RLAction> actions = new List<RelatedRecordService.RLAction>();
         if(rlConfig.Upload_Files_Action__c){
-            relatedRecordService.RLAction action = new relatedRecordService.RLAction();
+            RelatedRecordService.RLAction action = new RelatedRecordService.RLAction();
             action.label = 'Upload Files';action.name = 'Files';action.actionURL = '';action.type = 'ListAction';action.isFileUpload=true;
             actions.add(action);
         }
         if(rlConfig.New_Action__c && describeSobject.isCreateable()){
-            relatedRecordService.RLAction action = new relatedRecordService.RLAction();
+            RelatedRecordService.RLAction action = new RelatedRecordService.RLAction();
             action.label = 'New';action.name = 'New';action.actionURL = '';action.type = 'ListAction';
             actions.add(action);
         }
         if(rlConfig.Edit_Action__c && describeSobject.isUpdateable()){
-            relatedRecordService.RLAction action = new relatedRecordService.RLAction();
+            RelatedRecordService.RLAction action = new RelatedRecordService.RLAction();
             action.label = 'Edit';action.name = 'Edit';action.actionURL = '';action.type = 'RowAction';
             actions.add(action);
         }
         if(rlConfig.View_Action__c && describeSobject.isAccessible()){
-            relatedRecordService.RLAction action = new relatedRecordService.RLAction();
+            RelatedRecordService.RLAction action = new RelatedRecordService.RLAction();
             action.label = 'View';action.name = 'View';action.actionURL = '';action.type = 'RowAction';
             actions.add(action);
         }
         if(rlConfig.Delete_Action__c && describeSobject.isDeletable()){
-            relatedRecordService.RLAction action = new relatedRecordService.RLAction();
+            RelatedRecordService.RLAction action = new RelatedRecordService.RLAction();
             action.label = 'Delete';action.name = 'Delete';action.actionURL = '';action.type = 'RowAction';
             actions.add(action);
         }
@@ -121,9 +121,9 @@ public with sharing class RelatedRecordService {
         if(rlConfig.Custom_Actions__c){
             System.debug('custom actions......'+rlConfig.getSObjects('Related_List_Action_Configurations__r'));
             if (rlConfig.getSObjects('Related_List_Action_Configurations__r') != null && rlConfig.getSObjects('Related_List_Action_Configurations__r').size() != 0){
-                relatedRecordService.RLAction action;
+                RelatedRecordService.RLAction action;
                 for (Sobject eachCh : (List<SObject>)rlConfig.getSObjects('Related_List_Action_Configurations__r')) {
-                    action = new relatedRecordService.RLAction();
+                    action = new RelatedRecordService.RLAction();
                     action.label = String.valueOf(eachCh.get('MasterLabel'));
                     action.name = String.valueOf(eachCh.get('DeveloperName'));
                     action.type = String.valueOf(eachCh.get('Type__c'));
@@ -142,7 +142,7 @@ public with sharing class RelatedRecordService {
         }
     }
 
-    private static void setColumnHeaderActions(relatedRecordService.RLField field,  Related_List_Configuration__mdt rlConfig, Schema.DescribeSObjectResult describeSobject){
+    private static void setColumnHeaderActions(RelatedRecordService.RLField field,  Related_List_Configuration__mdt rlConfig, Schema.DescribeSObjectResult describeSobject){
         //
         // If Custom Actions are enabled, then get Custom Column Header Action configuration details, and add to individual field
         // 
@@ -200,7 +200,7 @@ public with sharing class RelatedRecordService {
         try{
             config = getRelatedListConfigDetails(rlcName);
             String fieldList = '';
-            for(relatedRecordService.RLField fld : config.fields){
+            for(RelatedRecordService.RLField fld : config.fields){
                 fieldList += fld.fieldName + ',';
             }
             fieldList = fieldList.removeEnd(',');
