@@ -2,7 +2,7 @@ import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { getRecord, deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-//import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
+import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { refreshApex } from '@salesforce/apex';
 
 import getRelatedListConfigDetails from '@salesforce/apex/RelatedRecordService.getRelatedListConfigDetails';
@@ -176,7 +176,7 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                 actionName: 'new'
             },
             state: {
-               defaultFieldValues : encodeDefaultFieldValues(JSON.parse("{\"" + this.parentIdField + "\":\"" + recordId + "\", FirstName:Ramana}"))
+               defaultFieldValues : encodeDefaultFieldValues(JSON.parse("{\"" + this.parentIdField + "\":\"" + recordId + "\"}"))
             }
         });
     } 
@@ -225,14 +225,22 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
             );
         });
     } 
-    
     handleCustom(object, actionUrl, tgtType, params){
         // Navigate to a URL
         if('URL' === tgtType){
+            let paramKeyVal = '';
+            if(params != undefined &&  params != null && params.length > 0){
+                let paramList = params.split('&');
+                paramList.forEach(item =>{
+                    let keyVal = item.split('=');
+                    paramKeyVal = paramKeyVal.length > 0 ? paramKeyVal + '&' : paramKeyVal;
+                    paramKeyVal += keyVal[0] + '=' + (keyVal[1].includes('this.recordId') ? this.recordId : keyVal[1]);
+                });
+            }
             this[NavigationMixin.Navigate]({
                 type: 'standard__webPage',
                 attributes: {
-                    url: actionUrl = (params != null ? actionUrl + '?' + params : actionUrl)
+                    url: actionUrl = (paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl)
                 }
             }, true);
         }else if('Lightning Component' === tgtType){
