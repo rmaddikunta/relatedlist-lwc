@@ -50,6 +50,7 @@ describe('c-related-list', () => {
                     return ('ListAction' === action.type);
                 });
                 expect(buttonEls.length).toBe(1);
+
             });
         });
 
@@ -122,6 +123,42 @@ describe('c-related-list', () => {
 
                 expect(mockGetNoData).toBeNull;
             });
+        });
+
+        it('sends event "delete" RowAction with contactId, on click', () => {
+    
+            // Create initial element
+            const element = createElement('c-related-list', {
+                is: RelatedListComp
+            });
+            document.body.appendChild(element);
+    
+            // Mock handler for child event
+            const handler = jest.fn();
+            // Add event listener to catch child event
+            element.addEventListener('handleRowAction',   handler  );
+    
+            // Emit data from @wire
+            getRecordDataAdapter.emit(mockGetRecordData);
+            
+            // Return a promise to wait for any asynchronous DOM updates. Jest
+            // will automatically wait for the Promise chain to complete before
+            // ending the test and fail the test if the promise rejects.
+            return Promise.resolve()
+                .then(() => {
+                    // Select a href to simulate user interaction
+                    const linkEl = element.shadowRoot.querySelectorAll('lightning-button .btn-secondary');
+                    console.log('linkEl....', linkEl.length);
+                    console.log('linkEl....', linkEl);
+                    linkEl[1].click();
+                })
+                .then(() => {
+                    // Validate if event got fired
+                    expect(handler).toHaveBeenCalled();
+                    expect(handler.mock.calls[0][0].detail).toEqual(
+                        EVENT_DETAIL_PARAMETER
+                    );
+                });
         });
     });
 
