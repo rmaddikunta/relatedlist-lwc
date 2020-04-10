@@ -4,9 +4,9 @@
     <externalId>false</externalId>
     <fieldManageability>SubscriberControlled</fieldManageability>
     <label>Sequence</label>
-    <precision>3</precision>
+    <precision>2</precision>
     <required>true</required>
     <scale>0</scale>
     <type>Number</type>
-    <unique>true</unique>
+    <unique>false</unique>
 </CustomField>
