@@ -10,5 +10,5 @@
     <required>true</required>
     <scale>0</scale>
     <type>Number</type>
-    <unique>true</unique>
+    <unique>false</unique>
 </CustomField>
