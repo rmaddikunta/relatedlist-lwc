@@ -102,6 +102,9 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
             this.rowsize = this.data.length;
         }
         this.isLoaded = true;
+        console.log('this.columns>>' , this.columns);
+
+        console.log('this.data>>' , this.data);
     }
 
     handleListAction(event) {
@@ -251,10 +254,64 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                 },
                 state: params
             }, true);
+        }else if('Export' === tgtType){
+            this.exportToCSVFile();
+        }else if('Import' === tgtType){
+            // Handle Import via Apex
+
+
         }
+        
     }
     
     refreshRLData() {
         return refreshApex(this.wiredResults);
+    }
+
+    exportToCSVFile() {   
+        //new line character for each data row
+        let newLineChar = '\n';
+
+        //
+        // csv content fabricated from data rows, 
+        // will Column Names as row 1 in CSV
+        //
+        let csvString = '';
+        let colData = new Set();
+        colData.add('Id');
+        this.columns.forEach(col => {
+            colData.add(col.fieldName);
+        });
+        colData = Array.from(colData);
+        csvString += colData.join(',');
+        csvString += newLineChar;
+
+        // Add table data rows into csv string, as comma separated values in each row.
+        for(let i=0; i < this.data.length; i++){
+            let colValue = 0;
+            for(let key in colData) {
+                if(colData.hasOwnProperty(key)) {
+                    let rowKey = colData[key];
+                    if(colValue > 0){
+                        csvString += ',';
+                    }
+                    let value = this.data[i][rowKey] === undefined ? '' : this.data[i][rowKey];
+                    csvString += '"'+ value +'"';
+                    colValue++;
+                }
+            }
+            csvString += newLineChar;
+        }
+        
+        //
+        // simulate file download action using 'a' tag with appropriate encoding.
+        // CSV File Name is set to '<parentId>_<child object name>.csv'
+        //
+        let downloadElement = document.createElement('a');
+        downloadElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvString);
+        downloadElement.target = '_self';
+        downloadElement.download = this.recordId + '_' + this.childObject + '.csv';
+        document.body.appendChild(downloadElement);
+        downloadElement.click(); 
     }
 }
