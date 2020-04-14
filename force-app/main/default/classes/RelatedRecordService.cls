@@ -77,7 +77,6 @@ public with sharing class RelatedRecordService {
                 setRowAndListActions(rlConfig, describeSobjects[0]);
             }                
             
-            System.debug('Config>>' + config.actions);
             return config;
             
         }
@@ -119,7 +118,6 @@ public with sharing class RelatedRecordService {
         // If Custom Actions are enabled, then get Custom Row and List Actions configuration details, and add to columns/fields array
         // 
         if(rlConfig.Custom_Actions__c){
-            System.debug('custom actions......'+rlConfig.getSObjects('Related_List_Action_Configurations__r'));
             if (rlConfig.getSObjects('Related_List_Action_Configurations__r') != null && rlConfig.getSObjects('Related_List_Action_Configurations__r').size() != 0){
                 RelatedRecordService.RLAction action;
                 for (Sobject eachCh : (List<SObject>)rlConfig.getSObjects('Related_List_Action_Configurations__r')) {
@@ -131,7 +129,6 @@ public with sharing class RelatedRecordService {
                     action.targetType = String.valueOf(eachCh.get('Target_Type__c'));
                     action.params = String.valueOf(eachCh.get('Parameters__c'));
                     action.sequence = Integer.valueOf(eachCh.get('Sequence__c'));
-                    System.debug('custom action>>'+ action);
                     actions.add(action);
                 }
             }   
@@ -208,20 +205,17 @@ public with sharing class RelatedRecordService {
             String sQuery = 'SELECT Id,'
             + fieldList
             + ' FROM ' + config.childObject
-            + ' WHERE ' + config.parentIdField + '=\'' + parentId + '\''; 
+            + ' WHERE ' + config.parentIdField + '=\'' + ID.valueOf(parentId) + '\''; 
             if(config.useCustomWhereClause && !String.isEmpty(config.customWhereClause)){
                 sQuery += ' AND (' + config.customWhereClause + ')';
             }
             
-            System.debug('SOQL=='+sQuery);
             records = Database.query( sQuery );
-            System.debug('records' + records);
         }
         catch(Exception e) {
             System.debug('error::' + e.getMessage());
             throw new AuraHandledException(e.getMessage());
         }
-
         return records;
     }
 
