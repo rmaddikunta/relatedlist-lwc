@@ -129,6 +129,9 @@ public with sharing class RelatedRecordService {
                     action.targetType = String.valueOf(eachCh.get('Target_Type__c'));
                     action.params = String.valueOf(eachCh.get('Parameters__c'));
                     action.sequence = Integer.valueOf(eachCh.get('Sequence__c'));
+                    if(action.type == 'ListAction' && action.targetType == 'Import'){
+                        action.isDataImport = true;
+                    }
                     actions.add(action);
                 }
             }   
@@ -219,6 +222,71 @@ public with sharing class RelatedRecordService {
         return records;
     }
 
+    @AuraEnabled(cacheable=false)
+    public static List<SObject> importDataFromCSV( String rlcName, String parentId, Id documentId ) {
+        List<SObject> records = new List<SObject>();
+        try{
+            //try it
+            //RLConfig config = getRelatedListConfigDetails(rlcName);
+            List<Schema.DescribeSObjectResult> describeSobjects = Schema.describeSObjects(new List<String>{'ContentVersion'});
+            if(describeSobjects[0].isQueryable() && describeSobjects[0].fields.getMap().get('VersionData').getDescribe().isAccessible()) {
+            
+                // getting File Data based on document id 
+                ContentVersion objVersion = [SELECT Id, VersionData FROM ContentVersion WHERE ContentDocumentId =:documentId];
+                // split the file data
+                if(objVersion != null && objVersion.VersionData != null){
+                    List<List<String>> csvData = RL_CSVParser.read(objVersion.VersionData.toString());
+                    processCSVData(rlcName, parentId, csvData);
+                }
+            }
+
+        }
+        catch(Exception e) {
+            System.debug('Error importing CSV data::' + e.getMessage() + '\n <> StackTrace:: ' + e.getStackTraceString());
+            throw new AuraHandledException(e.getMessage());
+        }
+        return records;
+    }
+    
+    private static void processCSVData(String rlcName, String parentId, List<List<String>> data){
+        
+        RLConfig config = getRelatedListConfigDetails(rlcName);
+        List<Schema.DescribeSObjectResult> describeSobjects = Schema.describeSObjects(new List<String>{config.childObject});
+        Schema.SObjectType sObjType = describeSobjects[0].getSObjectType();
+        List<SObject> recordsToInsert = new List<SObject>();
+        List<SObject> recordsToUpdate = new List<SObject>();
+
+        for(Integer i = 1; i < data.size(); i++){
+            SObject sObj = createSObjectRecord(sObjType, data[0], data[i]);
+            if(sObj.get('Id') != null){
+                recordsToUpdate.add(sObj);
+            }else{
+                sObj.put(config.parentIdField, parentId);
+                recordsToInsert.add(sObj);
+            }
+        }
+      
+        if(!recordsToInsert.isEmpty() && describeSobjects[0].isCreateable()) {
+            insert recordsToInsert;
+        }
+
+        if(!recordsToUpdate.isEmpty() && describeSobjects[0].isUpdateable()) {
+            update recordsToUpdate;
+        }
+    }
+    
+    private static SObject createSObjectRecord(Schema.SObjectType sObjType, List<String> headers, List<String> recData){
+        SObject sObj = sObjType.newSObject();
+        for(Integer i = 0; i < headers.size(); i++){
+            if(headers[i].toLowerCase() == 'id' && (recData[i] == null || recData[i].length() <=0 )){
+                //Do not add ID field if ID value is null 
+            }else{
+                sObj.put(headers[i], recData[i]);
+            }
+        }
+        return sObj;
+    }
+
     public class RLConfig {
         @AuraEnabled public String title;
         @AuraEnabled public String iconurl;
@@ -261,6 +329,7 @@ public with sharing class RelatedRecordService {
         @AuraEnabled public String params;
         @AuraEnabled public Integer sequence;
         @AuraEnabled public Boolean isFileUpload = false;
+        @AuraEnabled public Boolean isDataImport = false;
     }
 
 }
