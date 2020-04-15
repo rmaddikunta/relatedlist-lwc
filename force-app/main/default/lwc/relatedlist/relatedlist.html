@@ -33,7 +33,9 @@
                                     <template for:each={listActions} for:item="lAction">
                                         
                                         <template if:false={lAction.isFileUpload}>
-                                            <lightning-button class="btn btn-secondary" key={lAction.name} name={lAction.name} label={lAction.label} actiontype={lAction.type} actionurl={lAction.actionURL} onclick={handleListAction}></lightning-button>
+                                            <template if:false={lAction.isDataImport}>
+                                                <lightning-button class="btn btn-secondary" key={lAction.name} name={lAction.name} label={lAction.label} actionurl={lAction.actionURL} onclick={handleListAction}></lightning-button>
+                                            </template>
                                         </template>
                                         <template if:true={lAction.isFileUpload}>
                                             <lightning-file-upload
@@ -43,6 +45,17 @@
                                                     record-id={recordId}
                                                     onuploadfinished={handleUploadFinished}
                                                     multiple
+                                                    class="btn btn-secondary">
+                                            </lightning-file-upload>
+                                        </template>
+                                        <template if:true={lAction.isDataImport}>
+                                            <lightning-file-upload
+                                                    key={lAction.name}
+                                                    label={lAction.label}
+                                                    name="Import"
+                                                    accept={acceptedImportFormats}
+                                                    record-id={recordId}
+                                                    onuploadfinished={handleUploadFinished}
                                                     class="btn btn-secondary">
                                             </lightning-file-upload>
                                         </template>

@@ -7,6 +7,7 @@ import { refreshApex } from '@salesforce/apex';
 
 import getRelatedListConfigDetails from '@salesforce/apex/RelatedRecordService.getRelatedListConfigDetails';
 import getRelatedData from '@salesforce/apex/RelatedRecordService.getRelatedData';
+import importDataFromCSV from '@salesforce/apex/RelatedRecordService.importDataFromCSV';
 
 export default class relatedlist extends NavigationMixin(LightningElement) {
     //Adminstrator accessible attributes in app builder
@@ -167,7 +168,11 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
     }
 
     handleUploadFinished(event){
-        //nothing for now
+        const actionName = event.target.name;
+        const uploadedFiles = event.detail.files;
+        if ('Import' === actionName) {
+                this.handleImportDataFile(uploadedFiles);
+        }
     }
 
     handleNew(object, recordId){
@@ -240,10 +245,15 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                     paramKeyVal += keyVal[0] + '=' + (keyVal[1].includes('this.recordId') ? this.recordId : keyVal[1]);
                 });
             }
+            let urlString = window.location.href;
+            if(urlString.indexOf("/s") > -1){
+                let baseURL = urlString.substring(0, urlString.indexOf("/s"));
+                actionUrl = baseURL + actionUrl;
+            }
             this[NavigationMixin.Navigate]({
                 type: 'standard__webPage',
                 attributes: {
-                    url: actionUrl = (paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl)
+                    url: encodeURI(actionUrl = (paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl))
                 }
             }, true);
         }else if('Lightning Component' === tgtType){
@@ -256,12 +266,7 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
             }, true);
         }else if('Export' === tgtType){
             this.exportToCSVFile();
-        }else if('Import' === tgtType){
-            // Handle Import via Apex
-
-
-        }
-        
+        }     
     }
     
     refreshRLData() {
@@ -305,13 +310,47 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
         
         //
         // simulate file download action using 'a' tag with appropriate encoding.
-        // CSV File Name is set to '<parentId>_<child object name>.csv'
+        // CSV File Name is set to '<parentId>_<child object name>_<todays date>.csv'
         //
         let downloadElement = document.createElement('a');
         downloadElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvString);
         downloadElement.target = '_self';
-        downloadElement.download = this.recordId + '_' + this.childObject + '.csv';
+        let today = new Date();
+        downloadElement.download = this.recordId + '_' + this.childObject + '_' + (today.getMonth() + 1) +today.getDate() + today.getFullYear()  +'.csv';
         document.body.appendChild(downloadElement);
         downloadElement.click(); 
+    }
+
+    handleImportDataFile(uploadedFiles){
+        importDataFromCSV({rlcName: this.rlcName, parentId: this.recordId, documentId : uploadedFiles[0].documentId})
+        .then(result => {
+            let importedData = result;
+            console.log('importedData>>' , importedData);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: this.childObject + ' data imported successfully!',
+                    variant: 'success'
+                })
+            );
+            this.refreshRLData();
+        })
+        .catch(error => {
+            this.error = error;
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error!!',
+                    message: JSON.stringify(error),
+                    variant: 'error',
+                }),
+            );     
+        })
+    }
+
+    get acceptedFormats() {
+        return ['.csv','.pdf', '.png','.gif', '.jpeg','.doc', '.xls','.docx', '.xlsx'];
+    }
+    get acceptedImportFormats() {
+        return ['.csv'];
     }
 }
