@@ -22,6 +22,16 @@
                 <default>false</default>
                 <label>Lightning Component</label>
             </value>
+            <value>
+                <fullName>Export</fullName>
+                <default>false</default>
+                <label>Export</label>
+            </value>
+            <value>
+                <fullName>Import</fullName>
+                <default>false</default>
+                <label>Import</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>
