@@ -171,7 +171,7 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
         const actionName = event.target.name;
         const uploadedFiles = event.detail.files;
         if ('Import' === actionName) {
-                this.handleImportDataFile(uploadedFiles);
+            this.handleImportDataFile(uploadedFiles);
         }
     }
 
@@ -246,16 +246,26 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                 });
             }
             let urlString = window.location.href;
-            if(urlString.indexOf("/s") > -1){
-                let baseURL = urlString.substring(0, urlString.indexOf("/s"));
-                actionUrl = baseURL + actionUrl;
+            if(urlString.indexOf("/s/") > -1){
+                let baseURL = urlString.substring(0, urlString.indexOf("/s/")+3);
+                actionUrl = paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl;
+                actionUrl = baseURL + 'sfdcpage/' + actionUrl.replace(/\//g, '%2F').replace('?', '%3F').replace(/=/g,'%3D');
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__webPage',
+                    attributes: {
+                        url: actionUrl
+                    }
+                }, true);
+            }else{
+            
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__webPage',
+                    attributes: {
+                        url: encodeURI(actionUrl = (paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl))
+                    }
+                }, true);
             }
-            this[NavigationMixin.Navigate]({
-                type: 'standard__webPage',
-                attributes: {
-                    url: encodeURI(actionUrl = (paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl))
-                }
-            }, true);
+            
         }else if('Lightning Component' === tgtType){
             this[NavigationMixin.Navigate]({
                 type: 'standard__component',

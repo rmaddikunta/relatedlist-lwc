@@ -34,7 +34,7 @@
                                         
                                         <template if:false={lAction.isFileUpload}>
                                             <template if:false={lAction.isDataImport}>
-                                                <lightning-button class="btn btn-secondary" key={lAction.name} name={lAction.name} label={lAction.label} actionurl={lAction.actionURL} onclick={handleListAction}></lightning-button>
+                                                <lightning-button class="btn btn-secondary" key={lAction.name} name={lAction.name} label={lAction.label} onclick={handleListAction}></lightning-button>
                                             </template>
                                         </template>
                                         <template if:true={lAction.isFileUpload}>
