@@ -34,6 +34,8 @@ reusable related list lwc, with configurable row level and list level actions. T
     * Custom Actions
     * Query Filters 
 * Column Level Filter (filter values are automatically determined by distinct values in all rows...may be a little overhead?)
+* Preview Data Import from CSV file
+* Preprocess and show record level errorrs during data import
 
 
 _*Known Issues*_
