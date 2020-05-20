@@ -370,7 +370,6 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
         importDataFromCSV({rlcName: this.rlcName, parentId: this.recordId, documentId : uploadedFiles[0].documentId})
         .then(result => {
             let importedData = result;
-            console.log('importedData>>' , importedData);
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
