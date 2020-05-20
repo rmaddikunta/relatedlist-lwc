@@ -41,6 +41,8 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
     parentObject = ""
     relationshipApiName ="";
 
+    newObjectPageReference = "";
+
     /* @wire(getRecord, { recordId: '$recordId', fields: [ 'Id', 'Name' ] })
     wiredParentRecord(result){
         if (result.data){
@@ -71,7 +73,7 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                     });
                 }
                 if(config.fields != null){
-                    config.fields.forEach((col) => { columns.push(col) });
+                    config.fields.forEach((col) => { columns.push(col);});
                     if(rowActions.length > 0){
                         columns.push({ type: 'action', typeAttributes: { rowActions: rowActions } });
                     }
@@ -99,13 +101,16 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
         this.wiredResults = result;
         this.isLoaded = false;
         if(result.data){
-            this.data = result.data;
+            let data = result.data;
+            let nameUrl;
+            this.data = data.map(row => { 
+                nameUrl = '/' + row.Id;
+                return {...row , nameUrl};
+            })
             this.rowsize = this.data.length;
+            
         }
         this.isLoaded = true;
-        console.log('this.columns>>' , this.columns);
-
-        console.log('this.data>>' , this.data);
     }
 
     handleListAction(event) {
@@ -176,7 +181,6 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
     }
 
     handleNew(object, recordId){
-                
         this[NavigationMixin.Navigate]({
             type: 'standard__objectPage',
             attributes: {
@@ -184,11 +188,13 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                 actionName: 'new'
             },
             state: {
-               defaultFieldValues : encodeDefaultFieldValues(JSON.parse("{\"" + this.parentIdField + "\":\"" + recordId + "\"}"))
+                nooverride: 1,
+                useRecordTypeCheck: 1,
+                defaultFieldValues : encodeDefaultFieldValues(JSON.parse("{\"" + this.parentIdField + "\":\"" + recordId + "\"}"))
             }
-        });
+        }, true);
     } 
-    
+
     handleView(object, recordId){
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
@@ -235,7 +241,7 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
     } 
     handleCustom(object, actionUrl, tgtType, params){
         // Navigate to a URL
-        if('URL' === tgtType){
+        if('VF Page' === tgtType){
             let paramKeyVal = '';
             if(params != undefined &&  params != null && params.length > 0){
                 let paramList = params.split('&');
@@ -245,11 +251,15 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
                     paramKeyVal += keyVal[0] + '=' + (keyVal[1].includes('this.recordId') ? this.recordId : keyVal[1]);
                 });
             }
+            //
+            // VF pages in Lightning Communities are invoked with a specific URL pattern - Will need URL hacking for this.
+            // TO-DO: Revisit this section if there is resolution on VF page URL patterns.
+            //
             let urlString = window.location.href;
             if(urlString.indexOf("/s/") > -1){
                 let baseURL = urlString.substring(0, urlString.indexOf("/s/")+3);
                 actionUrl = paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl;
-                actionUrl = baseURL + 'sfdcpage/' + actionUrl.replace(/\//g, '%2F').replace('?', '%3F').replace(/=/g,'%3D');
+                actionUrl = baseURL + 'sfdcpage/' + actionUrl.replace(/\//g, '%2F').replace('?', '%3F').replace(/=/g,'%3D').replace(/&/g,'%26');
                 this[NavigationMixin.Navigate]({
                     type: 'standard__webPage',
                     attributes: {
@@ -276,7 +286,32 @@ export default class relatedlist extends NavigationMixin(LightningElement) {
             }, true);
         }else if('Export' === tgtType){
             this.exportToCSVFile();
-        }     
+        }else if('Community Page' === tgtType){
+            this[NavigationMixin.Navigate]({
+                type: 'comm__namedPage',
+                attributes: {
+                    pageName: actionUrl
+                }
+            });
+        }else if('URL' === tgtType){
+            let paramKeyVal = '';
+            if(params != undefined &&  params != null && params.length > 0){
+                let paramList = params.split('&');
+                paramList.forEach(item =>{
+                    let keyVal = item.split('=');
+                    paramKeyVal = paramKeyVal.length > 0 ? paramKeyVal + '&' : paramKeyVal;
+                    paramKeyVal += keyVal[0] + '=' + (keyVal[1].includes('this.recordId') ? this.recordId : keyVal[1]);
+                });
+            }
+
+            this[NavigationMixin.Navigate]({
+                type: 'standard__webPage',
+                attributes: {
+                    url: encodeURI(actionUrl = (paramKeyVal != null && paramKeyVal.length > 0 ? actionUrl + '?' + paramKeyVal : actionUrl))
+                }
+            }, true);
+        }    
+
     }
     
     refreshRLData() {
