@@ -19,7 +19,10 @@ reusable related list lwc, with configurable row level and list level actions. T
       
 # Compoment Usability:
    - RecordPage: on a record page in Lightning App Builder.
+   ![alt text](https://github.com/rmaddikunta/relatedlist-lwc/blob/master/Lightning%20App%20Builder%20Usage.png)
    - Community Page: on a Lightning community page in Experience Builder.
+   ![alt text](https://github.com/rmaddikunta/relatedlist-lwc/blob/master/Experience Builder Usage.png)
+
 
 # Future Enhancements:
 
