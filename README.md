@@ -17,5 +17,5 @@ Future Enhancements:
 _*Known Issues*_
 
 * Related List does not refresh on standard Edit action.
-* Can Record Type selection be imposed?
+* Record Type Selection and Default Field Values not supported in Communities.
 
