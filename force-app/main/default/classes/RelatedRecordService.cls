@@ -59,10 +59,19 @@ public with sharing class RelatedRecordService {
                         }
                         
                         field.sequence = Integer.valueOf(eachCh.get('Sequence__c'));
-                        field.type = describeSobjects[0].fields.getMap().get(String.valueOf(eachCh.get('Field_Name__c'))).getDescribe().getType().name();
                         field.sortable = Boolean.valueOf(eachCh.get('Sortable__c'));
                         field.enableFilter = Boolean.valueOf(eachCh.get('Filter__c'));
                         field.filterValues = String.valueOf(eachCh.get('Filter_Values__c'));
+
+                        if(field.fieldName.toLowerCase().contains('name')){
+                            field.type = 'url';
+                            field.fieldName = 'nameUrl';
+                            TypeAttrLabel attr = new TypeAttrLabel('Name');
+                            field.typeAttributes = new TypeAttribute(attr);
+                        }else{
+                            field.type = describeSobjects[0].fields.getMap().get(String.valueOf(eachCh.get('Field_Name__c'))).getDescribe().getType().name();
+                        }
+                        
                         //
                         // Get Column Header level actions, if any. These need to be set at individual column/field
                         //
@@ -201,11 +210,13 @@ public with sharing class RelatedRecordService {
             config = getRelatedListConfigDetails(rlcName);
             String fieldList = '';
             for(RelatedRecordService.RLField fld : config.fields){
-                fieldList += fld.fieldName + ',';
+                if(fld.fieldName != 'nameURL'){
+                    fieldList += fld.fieldName + ',';
+                }
             }
             fieldList = fieldList.removeEnd(',');
 
-            String sQuery = 'SELECT Id,'
+            String sQuery = 'SELECT Id, Name, '
             + fieldList
             + ' FROM ' + config.childObject
             + ' WHERE ' + config.parentIdField + '=\'' + ID.valueOf(parentId) + '\''; 
@@ -317,8 +328,8 @@ public with sharing class RelatedRecordService {
         @AuraEnabled public String filterValues;
         @AuraEnabled public Integer sequence;
         @AuraEnabled public Boolean sortable;
-        
-        //@AuraEnabled public String editable;
+        @AuraEnabled public TypeAttribute typeAttributes;
+        @AuraEnabled public Boolean editable = false;
     }
     private class RLAction{
         @AuraEnabled public String label;
@@ -330,6 +341,27 @@ public with sharing class RelatedRecordService {
         @AuraEnabled public Integer sequence;
         @AuraEnabled public Boolean isFileUpload = false;
         @AuraEnabled public Boolean isDataImport = false;
+    }
+
+    private class TypeAttribute{
+        @AuraEnabled public TypeAttrLabel label;
+        //@AuraEnabled public String target='_self';
+
+        TypeAttribute(TypeAttrLabel lbl, String tgt){
+            label = lbl;
+            //target = tgt;
+        }
+        TypeAttribute(TypeAttrLabel lbl){
+            label = lbl;
+        }
+
+    }
+
+    private class TypeAttrLabel{
+        @AuraEnabled public String fieldName;
+        TypeAttrLabel(String name){
+            fieldName = name;
+        }
     }
 
 }
